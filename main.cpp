@@ -29,7 +29,8 @@ int main(int argc, char *argv[]) {
         lab.push_back(line);
     }
 
-    // Find the longest path
+    // Go through all possible starting point and try to figure out
+    // from which point we can get the longest path
     int max = 0, maxStartFromR  = -1, maxStartFromC = -1;
     std::vector<int> path;
     for (int i = 0; i < lab.size(); i++) {
@@ -46,7 +47,6 @@ int main(int argc, char *argv[]) {
     }
 
     // Write the length of the longest path and the schema
-
     // I use arrows to show the path, because it hard to show the path
     // properly if the length is greater than 10
     int n = 0;
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
 
 void findLongestPath_Recursive(std::vector<string> &lab, int r, int c, int deep, std::vector<int> &path) {
 
-    // Go through four directions
+    // Go through four directions and do deep-first search
     lab[r][c] = '#';
     for (int i = 0; i < 4; i++) {
         int nr = r + directions[i][0];
@@ -94,6 +94,9 @@ void findLongestPath_Recursive(std::vector<string> &lab, int r, int c, int deep,
         path.pop_back();
     }
     lab[r][c] = '.';
+
+    // As long as `deep` is greater than the maximum length of known longest path,
+    // we change the record.
     if (deep > maxLenOfPath) {
         maxPathIsChanged = true;
         maxLenOfPath = deep;
