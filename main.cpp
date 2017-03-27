@@ -21,38 +21,38 @@ int main(int argc, char *argv[]) {
         std::cerr << "Usage: " << "CplusplusChallenge" << " inputfile" << std::endl;
         return 1;
     }
+
     std::ifstream infile(argv[1]);
-    std::string l;
+    std::string line;
     std::vector<std::string> lab;
-    while (std::getline(infile, l)) {
-        lab.push_back(l);
+    while (std::getline(infile, line)) {
+        lab.push_back(line);
     }
 
     // Find the longest path
-    int max = 0, maxi  = -1, maxj = -1;
+    int max = 0, maxStartFromR  = -1, maxStartFromC = -1;
     std::vector<int> path;
-
     for (int i = 0; i < lab.size(); i++) {
-        const auto& line = lab[i];
-        for (int j = 0; j < line.size(); j++) {
-            maxPathIsChanged = false;
-            if (line[j] == '.') {
+        for (int j = 0; j < lab[i].size(); j++) {
+            if (lab[i][j] == '.') {
+                maxPathIsChanged = false;
                 findLongestPath_Recursive(lab, i, j, 0, path);
                 if (maxPathIsChanged) {
-                    maxi = i;
-                    maxj = j;
+                    maxStartFromR = i;
+                    maxStartFromC = j;
                 }
             }
         }
     }
 
     // Write the length of the longest path and the schema
+
     // I use arrows to show the path, because it hard to show the path
     // properly if the length is greater than 10
     int n = 0;
-    if (maxi != -1) {
-        int r = maxi;
-        int c = maxj;
+    if (maxStartFromR != -1) {
+        int r = maxStartFromR;
+        int c = maxStartFromC;
         lab[r][c] = '*';
         n++;
         for (auto& d : maxPath) {
@@ -63,8 +63,8 @@ int main(int argc, char *argv[]) {
         }
     }
     std::cout << n << std::endl;
-    for (const auto& line : lab) {
-        std::cout << line << std::endl;
+    for (const auto& row : lab) {
+        std::cout << row << std::endl;
     }
 
     return 0;
